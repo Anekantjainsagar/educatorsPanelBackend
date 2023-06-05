@@ -1,11 +1,11 @@
 const express = require("express");
-const loginRoute = express.Router();
-
-const LoginUser = require("../Model/loginSchema");
-
 var bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+
+const loginRoute = express.Router();
 var salt = bcrypt.genSaltSync(10);
+
+const LoginUser = require("../Model/loginSchema");
 
 loginRoute.post("/sign-up", async (req, res) => {
   let { name, email, password } = req.body;
