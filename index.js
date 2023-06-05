@@ -14,10 +14,6 @@ app.use(express.json());
 app.use("/login", loginRoute);
 app.use("/educator", educators);
 
-app.get("/", (req, res) => {
-  res.send("Hello world");
-});
-
 app.listen(process.env.PORT, () => {
   console.log(`Educator panel is listening on port : ${process.env.PORT}`);
 });
