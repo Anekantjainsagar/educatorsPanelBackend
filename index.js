@@ -1,6 +1,7 @@
 require("dotenv").config();
 
 const express = require("express");
+const cors = require("cors");
 const app = express();
 // MongoDb Connect
 const connectToDb = require("./db/conn");
@@ -10,6 +11,7 @@ const educators = require("./Routes/educators");
 
 connectToDb();
 
+app.use(cors());
 app.use(express.json());
 app.use("/login", loginRoute);
 app.use("/educator", educators);

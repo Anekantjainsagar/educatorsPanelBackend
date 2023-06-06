@@ -13,12 +13,13 @@ loginRoute.post("/sign-up", async (req, res) => {
   email = email?.toLowerCase();
 
   const isUnique = await LoginUser.find({ email });
-  if (!isUnique) {
+  console.log(isUnique);
+  if (isUnique.length == 0) {
     const user = new LoginUser({ name, email, password });
     user
       .save()
       .then((result) => {
-        console.log(result);
+        res.send({ name: result?.name });
       })
       .catch((err) => {
         console.log(err);
@@ -28,11 +29,11 @@ loginRoute.post("/sign-up", async (req, res) => {
   }
 });
 
-loginRoute.get("/sign-in", async (req, res) => {
+loginRoute.post("/sign-in", async (req, res) => {
   let { email, password } = req.body;
   email = email?.toLowerCase();
 
-  const isUnique = await LoginUser.find({ email });
+  let isUnique = await LoginUser.find({ email });
   isUnique = isUnique[0];
   if (isUnique) {
     const matched = await bcrypt.compare(password, isUnique?.password);
@@ -52,6 +53,16 @@ loginRoute.get("/sign-in", async (req, res) => {
     }
   } else {
     res.send("User doesn't exists");
+  }
+});
+
+loginRoute.post("/checkToken", async (req, res) => {
+  const decode = jwt.verify(req.body.token, process.env.SECRET_KEY);
+  const user = await LoginUser.findById(decode.user);
+  if (user) {
+    res.send({ name: user?.name, _id: user?._id });
+  } else {
+    res.send("Some Error Occured");
   }
 });
 

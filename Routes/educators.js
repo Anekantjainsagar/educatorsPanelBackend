@@ -1,12 +1,12 @@
 const express = require("express");
 const multer = require("multer");
-
+const csvtojson = require("csvtojson");
 const educators = express.Router();
 const Educator = require("../Model/educatorSchema");
 
 var storeExcel = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "./server/uploads");
+    cb(null, "./Routes/uploads");
   },
   filename: (req, file, cb) => {
     cb(null, file.originalname);
@@ -45,6 +45,11 @@ educators.get("/getEducators", async (req, res) => {
     educators: educators,
     noOfEducators: noOfEducators.length,
   });
+});
+
+educators.get("/getAllEducators", async (req, res) => {
+  const educators = await Educator.find();
+  res.send({ educators });
 });
 
 educators.post("/addEducator", async (req, res) => {
@@ -99,7 +104,7 @@ educators.post("/addEducator", async (req, res) => {
     });
 });
 
-educators.delete("/deleteUser", (req, res) => {
+educators.delete("/deleteEducator", (req, res) => {
   const { id } = req.body;
   Educator.deleteOne({ _id: id }, (err, data) => {
     res.send(data);
@@ -107,7 +112,7 @@ educators.delete("/deleteUser", (req, res) => {
 });
 
 educators.post(
-  "/uploadEducator",
+  "/uploadEducators",
   uploadExcel.single("file"),
   async (req, res) => {
     const filePath = __dirname + "/uploads/" + req.file.filename;
@@ -116,7 +121,7 @@ educators.post(
       .fromFile(filePath)
       .then((source) => {
         for (var i = 0; i < source.length; i++) {
-          if (source[i]["name"]?.length > 0) {
+          if (source[i]["Name"]?.length > 0) {
             var singleRow = {
               name: source[i]["Name"],
               email: source[i]["Email"],
@@ -134,16 +139,14 @@ educators.post(
               grossDeduction: source[i]["Gross Deduction"],
               netPay: source[i]["Net Pay"],
               payslips: source[i]["Payslips"],
+              incentive: source[i]["Incentive"],
             };
           }
           arrayToInsert.push(singleRow);
         }
         console.log(arrayToInsert);
-        Educator.insertMany(arrayToInsert, (err, result) => {
-          if (err) console.log(err);
-          if (result) {
-            res.send(result);
-          }
+        Educator.insertMany(arrayToInsert).then(() => {
+          res.send("Added Successfully");
         });
       });
   }
