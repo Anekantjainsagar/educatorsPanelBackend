@@ -104,6 +104,56 @@ educators.post("/addEducator", async (req, res) => {
     });
 });
 
+educators.put("/updateEducator", async (req, res) => {
+  const {
+    id,
+    name,
+    email,
+    address,
+    bankName,
+    accountNo,
+    bankBranch,
+    ifscCode,
+    basicPay,
+    incentive,
+    travelAllowance,
+    otherAllowance,
+    grossEarning,
+    tds,
+    penalties,
+    grossDeduction,
+    netPay,
+    emailSent,
+    payslips,
+  } = req.body;
+
+  Educator.updateOne(
+    { _id: id },
+    {
+      name,
+      email,
+      address,
+      bankName,
+      accountNo,
+      bankBranch,
+      ifscCode,
+      basicPay,
+      incentive,
+      travelAllowance,
+      otherAllowance,
+      grossEarning,
+      tds,
+      penalties,
+      grossDeduction,
+      netPay,
+      emailSent,
+      payslips,
+    }
+  ).then((response) => {
+    res.send(response);
+  });
+});
+
 educators.delete("/deleteEducator", (req, res) => {
   const { id } = req.body;
   Educator.deleteOne({ _id: id }).then((response) => {
@@ -151,5 +201,9 @@ educators.post(
       });
   }
 );
+
+educators.get("/downloadFormat", (req, res) => {
+  res.download("./Routes/uploads/EducatorPanel.csv");
+});
 
 module.exports = educators;
