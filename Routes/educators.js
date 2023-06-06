@@ -106,8 +106,8 @@ educators.post("/addEducator", async (req, res) => {
 
 educators.delete("/deleteEducator", (req, res) => {
   const { id } = req.body;
-  Educator.deleteOne({ _id: id }, (err, data) => {
-    res.send(data);
+  Educator.deleteOne({ _id: id }).then((res) => {
+    res.send(res);
   });
 });
 
