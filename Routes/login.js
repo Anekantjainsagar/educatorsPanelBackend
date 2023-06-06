@@ -10,7 +10,7 @@ const LoginUser = require("../Model/loginSchema");
 loginRoute.post("/sign-up", async (req, res) => {
   let { name, email, password } = req.body;
   password = await bcrypt.hash(password, salt);
-  email = email.toLowerCase();
+  email = email?.toLowerCase();
 
   const isUnique = await LoginUser.find({ email });
   if (!isUnique) {
@@ -30,12 +30,12 @@ loginRoute.post("/sign-up", async (req, res) => {
 
 loginRoute.get("/sign-in", async (req, res) => {
   let { email, password } = req.body;
-  email = email.toLowerCase();
+  email = email?.toLowerCase();
 
   const isUnique = await LoginUser.find({ email });
   isUnique = isUnique[0];
   if (isUnique) {
-    const matched = await bcrypt.compare(password, isUnique.password);
+    const matched = await bcrypt.compare(password, isUnique?.password);
     if (matched) {
       const jwtToken = jwt.sign(
         {
