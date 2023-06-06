@@ -118,22 +118,22 @@ educators.post(
         for (var i = 0; i < source.length; i++) {
           if (source[i]["name"]?.length > 0) {
             var singleRow = {
-              name: source[i]["name"],
-              email: source[i]["email"],
-              address: source[i]["address"],
-              bankName: source[i]["bankName"],
-              bankBranch: source[i]["bankBranch"],
-              accountNo: source[i]["accountNo"],
-              ifscCode: source[i]["ifscCode"],
-              basicPay: source[i]["basicPay"],
-              travelAllowance: source[i]["travelAllowance"],
-              otherAllowance: source[i]["otherAllowance"],
-              grossEarning: source[i]["grossEarning"],
-              tds: source[i]["tds"],
-              penalties: source[i]["penalties"],
-              grossDeduction: source[i]["grossDeduction"],
-              netPay: source[i]["netPay"],
-              payslips: source[i]["payslips"],
+              name: source[i]["Name"],
+              email: source[i]["Email"],
+              address: source[i]["Address"],
+              bankName: source[i]["Bank Name"],
+              bankBranch: source[i]["Bank Branch"],
+              accountNo: source[i]["Account No"],
+              ifscCode: source[i]["IFSC Code"],
+              basicPay: source[i]["Basic Pay"],
+              travelAllowance: source[i]["Travel Allowance"],
+              otherAllowance: source[i]["Other Allowance"],
+              grossEarning: source[i]["Gross Earning"],
+              tds: source[i]["TDS"],
+              penalties: source[i]["Penalties"],
+              grossDeduction: source[i]["Gross Deduction"],
+              netPay: source[i]["Net Pay"],
+              payslips: source[i]["Payslips"],
             };
           }
           arrayToInsert.push(singleRow);
