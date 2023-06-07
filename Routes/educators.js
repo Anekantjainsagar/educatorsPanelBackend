@@ -19,7 +19,7 @@ var uploadExcel = multer({ storage: storeExcel });
 educators.get("/sendMail", async (req, res) => {
   const educators = await Educator.find();
   sgMail.setApiKey(process.env.API_KEY);
-  const sendMail = false;
+  let sendMail = false;
 
   educators.map((e) => {
     const msg = {
