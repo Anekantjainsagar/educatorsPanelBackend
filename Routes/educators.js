@@ -18,48 +18,55 @@ var uploadExcel = multer({ storage: storeExcel });
 
 educators.get("/sendMail", async (req, res) => {
   const educators = await Educator.find();
-  let emails = [];
-  educators.map((e) => {
-    emails.push(e.email);
-  });
-
   sgMail.setApiKey(process.env.API_KEY);
-  const msg = {
-    to: [...emails], // Change to your recipient
-    from: "anekantjainsagar@gmail.com", // Change to your verified sender
-    subject: "Pay Slip for the month of MAY 2023",
-    text: "and easy to do anywhere, even with Node.js",
-    html: "<strong>and easy to do anywhere, even with Node.js</strong>",
-    templateId: "d-9a86c9024bc542818ebfbdd73f5bffaf",
-    dynamic_template_data: {
-      PayslipReleaseDate: new Date(Date.now()).toString().slice(4, 16),
-      email: "anekantjainsagar@gmail.com",
-      name: "Anekant Jain",
-      bankName: "SBI",
-      ifscCode: "SBINXXXXX",
-      accountNo: "SBINXXXXX",
-      address: "XXXXXXXX",
-      net: "5000",
-      basicPay: "1000",
-      tds: "1000",
-      incentive: "1000",
-      travelAllowance: "1000",
-      penalties: "1000",
-      otherAllowance: "1000",
-      grossEarning: "1000",
-      grossDeduction: "1000",
-      netPay: "1000",
-    },
-  };
+  const sendMail = false;
 
-  sgMail
-    .send(msg)
-    .then(() => {
-      res.send("Email sent");
-    })
-    .catch((error) => {
-      console.error(error?.response?.body);
-    });
+  educators.map((e) => {
+    const msg = {
+      to: e.email, // Change to your recipient
+      from: "anekantjainsagar@gmail.com", // Change to your verified sender
+      subject: `Pay Slip for the month of ${new Date(
+        Date.now()
+      ).getMonth()} ${new Date(Date.now()).getFullYear()}`,
+      text: "and easy to do anywhere, even with Node.js",
+      html: "<strong>and easy to do anywhere, even with Node.js</strong>",
+      templateId: "d-9a86c9024bc542818ebfbdd73f5bffaf",
+      dynamic_template_data: {
+        PayslipReleaseDate: new Date(Date.now()).toString().slice(4, 16),
+        email: e.email,
+        name: e.name,
+        bankName: e.bankName,
+        ifscCode: e.ifscCode,
+        accountNo: e.accountNo,
+        address: e.address,
+        basicPay: e.basicPay,
+        tds: e.tds,
+        incentive: e.incentive,
+        travelAllowance: e.travelAllowance,
+        penalties: e.penalties,
+        otherAllowance: e.otherAllowance,
+        grossEarning: e.grossEarning,
+        grossDeduction: e.grossDeduction,
+        netPay: e.netPay,
+      },
+    };
+
+    sgMail
+      .send(msg)
+      .then(() => {
+        sendMail = true;
+        console.log(res);
+      })
+      .catch((error) => {
+        sendMail = false;
+        console.error(error?.response?.body);
+      });
+  });
+  if (sendMail === true) {
+    res.send("Email sent");
+  } else {
+    res.send("Error Occured");
+  }
 });
 
 educators.get("/getEducators", async (req, res) => {
