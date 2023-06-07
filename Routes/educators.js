@@ -19,7 +19,6 @@ var uploadExcel = multer({ storage: storeExcel });
 educators.get("/sendMail", async (req, res) => {
   const educators = await Educator.find();
   sgMail.setApiKey(process.env.API_KEY);
-  let sendMail = false;
 
   educators.map((e) => {
     const msg = {
@@ -53,20 +52,15 @@ educators.get("/sendMail", async (req, res) => {
 
     sgMail
       .send(msg)
-      .then(() => {
-        sendMail = true;
-        console.log(res);
+      .then((response) => {
+        console.log(response[0]);
       })
       .catch((error) => {
-        sendMail = false;
+        res.send("An Error Occurred");
         console.error(error?.response?.body);
       });
   });
-  if (sendMail === true) {
-    res.send("Email sent");
-  } else {
-    res.send("Error Occured");
-  }
+  res.send("Email sent");
 });
 
 educators.get("/getEducators", async (req, res) => {
