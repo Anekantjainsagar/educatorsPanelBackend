@@ -31,6 +31,9 @@ educators.get("/sendMail", async (req, res) => {
       html: "<strong>and easy to do anywhere, even with Node.js</strong>",
       templateId: "d-9a86c9024bc542818ebfbdd73f5bffaf",
       dynamic_template_data: {
+        subjectHYE: `Pay Slip for the month of ${new Date(
+          Date.now()
+        ).getMonth()} ${new Date(Date.now()).getFullYear()}`,
         PayslipReleaseDate: new Date(Date.now()).toString().slice(4, 16),
         email: e.email,
         name: e.name,
