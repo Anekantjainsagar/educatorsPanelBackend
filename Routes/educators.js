@@ -134,8 +134,6 @@ educators.post("/addEducator", async (req, res) => {
     penalties,
     grossDeduction,
     netPay,
-    emailSent,
-    payslips,
   } = req.body;
 
   const educators = new Educator({
@@ -155,8 +153,6 @@ educators.post("/addEducator", async (req, res) => {
     penalties,
     grossDeduction,
     netPay,
-    emailSent,
-    payslips,
   });
   educators
     .save()
@@ -187,8 +183,6 @@ educators.put("/updateEducator", async (req, res) => {
     penalties,
     grossDeduction,
     netPay,
-    emailSent,
-    payslips,
   } = req.body;
 
   Educator.updateOne(
@@ -210,8 +204,6 @@ educators.put("/updateEducator", async (req, res) => {
       penalties,
       grossDeduction,
       netPay,
-      emailSent,
-      payslips,
     }
   ).then((response) => {
     res.send(response);
@@ -252,7 +244,6 @@ educators.post(
               penalties: source[i]["Penalties"],
               grossDeduction: source[i]["Gross Deduction"],
               netPay: source[i]["Net Pay"],
-              payslips: source[i]["Payslips"],
               incentive: source[i]["Incentive"],
             };
           }

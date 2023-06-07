@@ -1,2 +1,2 @@
-Name,Email,Address,Bank Name,Bank Branch,Account No,IFSC Code,Basic Pay,Travel Allowance,Other Allowance,Gross Earning,TDS,Penalties,Gross Deduction,Net Pay,Payslips,Incentive
-Anekant Jain,anekantjainsagar@gmail.com,Indore,SBI,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+Name,Email,Address,Bank Name,Account No,Bank Branch,IFSC Code,Basic Pay,Incentive,Travel Allowance,Other Allowance,Gross Earning,TDS,Penalties,Gross Deduction,Net Pay
+Anekant Jain,anekantjainsagar@gmail.com,Indore,SBI,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
