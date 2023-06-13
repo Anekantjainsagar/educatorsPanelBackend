@@ -4,6 +4,9 @@ const csvtojson = require("csvtojson");
 const educators = express.Router();
 const sgMail = require("@sendgrid/mail");
 const Educator = require("../Model/educatorSchema");
+const fs = require("fs");
+var nodemailer = require("nodemailer");
+const { PDFDocument } = require("pdf-lib");
 
 var storeExcel = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -15,69 +18,6 @@ var storeExcel = multer.diskStorage({
 });
 
 var uploadExcel = multer({ storage: storeExcel });
-const month = [
-  "JAN",
-  "FEB",
-  "MAR",
-  "APR",
-  "MAY",
-  "JUNE",
-  "JULY",
-  "AUG",
-  "SEPT",
-  "OCT",
-  "NOV",
-  "DEC",
-];
-educators.get("/sendMail", async (req, res) => {
-  const educators = await Educator.find();
-  sgMail.setApiKey(process.env.API_KEY);
-
-  educators.map((e) => {
-    const msg = {
-      to: e.email, // Change to your recipient
-      from: "anekantjainsagar@gmail.com", // Change to your verified sender
-      subject: `Pay Slip for the month of ${new Date(
-        Date.now()
-      ).getMonth()} ${new Date(Date.now()).getFullYear()}`,
-      text: "and easy to do anywhere, even with Node.js",
-      html: "<strong>and easy to do anywhere, even with Node.js</strong>",
-      templateId: "d-9a86c9024bc542818ebfbdd73f5bffaf",
-      dynamic_template_data: {
-        date: ` ${month[new Date(Date.now()).getMonth()]} ${new Date(
-          Date.now()
-        ).getFullYear()}`,
-        PayslipReleaseDate: new Date(Date.now()).toString().slice(4, 16),
-        email: e.email,
-        name: e.name,
-        bankName: e.bankName,
-        ifscCode: e.ifscCode,
-        accountNo: e.accountNo,
-        address: e.address,
-        basicPay: e.basicPay,
-        tds: e.tds,
-        incentive: e.incentive,
-        travelAllowance: e.travelAllowance,
-        penalties: e.penalties,
-        otherAllowance: e.otherAllowance,
-        grossEarning: e.grossEarning,
-        grossDeduction: e.grossDeduction,
-        netPay: e.netPay,
-      },
-    };
-
-    sgMail
-      .send(msg)
-      .then((response) => {
-        console.log(response[0]);
-      })
-      .catch((error) => {
-        res.send("An Error Occurred");
-        console.error(error?.response?.body);
-      });
-  });
-  res.send("Email sent");
-});
 
 educators.get("/getEducators", async (req, res) => {
   var { page, size, search } = req.query;
@@ -259,6 +199,85 @@ educators.post(
 
 educators.get("/downloadFormat", (req, res) => {
   res.download("./Routes/uploads/EducatorPanel.csv");
+});
+
+educators.get("/sendMail", async (req, res) => {
+  const users = await Educator.find();
+
+  var mail = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: "anekantjainsagar@gmail.com",
+      pass: "wxnebcghxlgplaiu",
+    },
+  });
+
+  const month = [
+    "JAN",
+    "FEB",
+    "MAR",
+    "APR",
+    "JUNE",
+    "JULY",
+    "AUG",
+    "SEPT",
+    "OCT",
+    "NOV",
+    "DEC",
+  ];
+
+  users.map(async (e) => {
+    const result = await mail.sendMail({
+      to: e.email,
+      subject: `Pay Slip for the month of ${
+        month[new Date().getMonth() - 2]
+      } ${new Date().getFullYear()}`,
+      text: `
+      Dear ${e.name},
+      Confident you're doing well...!
+      
+      Attached herewith, kindly find the detailed information regarding your compensation, acknowledging your exceptional efforts and contributions. We highly appreciate your hard work and believe in offering fair and prompt remuneration for your commitment.
+      
+      If you have any questions or require further clarification, please do not hesitate to reach out to educators@oll.co.
+      
+      Best
+      Team Accounts.`,
+      attachments: [
+        {
+          // utf-8 string as an attachment
+          filename: "Educator Payslip.html",
+          content: `<html> <head> <title></title> </head> <body style="font-family:Arial; margin: 0 20px;"><div> <img src="http://cdn.mcauto-images-production.sendgrid.net/9dce8bd65b7f8879/11bbd28e-de1d-4de6-adde-54f2812f64e6/902x902.png" width="45px" style="margin:auto; display:block;" /> <h1 style="font-size:22px; text-align:center;">OLL</h1> </div> <h4 style="font-size:17px;">Date : ${
+            month[new Date().getMonth() - 2]
+          } ${new Date().getFullYear()}<span style="font-weight:500"></span></h4> <table style="padding:15px 10px; width:100%; font-size:16.5px; border:1px solid black;"> <tr> <td>${
+            e.name
+          }</td> <td>${e.bankName}</td> </tr> <tr> <td>${e.email}</td> <td>${
+            e.accountNo
+          }</td> </tr> <tr> <td>${e.address}</td> <td>${
+            e.ifscCode
+          }</td> </tr> </div> <table style="width:100%; text-align:center; font-size:14px; margin-top:20px;" border=1> <tr style="color:white;"> <th style="background-color:red; padding:6px 0;">Earning</th> <th style="background-color:red; padding:6px 0;">Amount</th> <th style="background-color:gray; padding:6px 0;">Deduction</th> <th style="background-color:gray; padding:6px 0;">Amount</th> </tr> <tr style="color:black;"> <td style="padding:6px 0; font-weight:550;">Basic Pay</td> <td style="padding:6px 0;">Rs. ${
+            e.basicPay
+          }</td> <td style="padding:6px 0; font-weight:550;">TDS</td> <td style="padding:6px 0;">Rs. ${
+            e.tds
+          }</td> </tr> <tr style="color:black;"> <td style="padding:6px 0; font-weight:550;">Incentive</td> <td style="padding:6px 0;">Rs. ${
+            e.incentive
+          }</td> <td style="padding:6px 0; font-weight:550;">Penalities</td> <td style="padding:6px 0;">Rs. ${
+            e.penalties
+          }</td> </tr> <tr style="color:black;"> <td style="padding:6px 0; font-weight:550;">Travel Allowance</td> <td style="padding:6px 0;">Rs. ${
+            e.travelAllowance
+          }</td> </tr> <tr style="color:black;"> <td style="padding:6px 0; font-weight:550;">Other Allowance</td> <td style="padding:6px 0;">Rs. ${
+            e.otherAllowance
+          }</td> </tr> <tr style="color:black;"> <td style="padding:6px 0; font-weight:550;">Gross Earning</td> <td style="padding:6px 0;">Rs. ${
+            e.grossEarning
+          }</td> <td style="padding:6px 0; font-weight:550;">Gross Deduction</td> <td style="padding:6px 0;">Rs. ${
+            e.grossDeduction
+          }</td> </tr> </table> <h1 style="font-size:17px; margin-top:20px;">Net Pay : Rs. ${
+            e.netPay
+          }</h1> <p style="font-size:16px;">Sincerely,</p> <h3 style="font-size:16px;">Clone Futura Live Solutions Pvt Ltd.</h3> <img src="http://cdn.mcauto-images-production.sendgrid.net/9dce8bd65b7f8879/3da687cd-c0ae-4bd3-a2ee-e78b2f59cf98/178x82.jpg" width="150px" /> <h3 style="font-size:16px;">Koshika Mahajan</h3> </body> </html>`,
+        },
+      ],
+    });
+    console.log(result);
+  });
 });
 
 module.exports = educators;
