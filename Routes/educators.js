@@ -4,10 +4,7 @@ const csvtojson = require("csvtojson");
 const educators = express.Router();
 const sgMail = require("@sendgrid/mail");
 const Educator = require("../Model/educatorSchema");
-const fs = require("fs");
 var nodemailer = require("nodemailer");
-const { PDFDocument } = require("pdf-lib");
-const htmlToPdfBuffer = require("./template");
 
 var storeExcel = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -226,10 +223,6 @@ educators.get("/sendMail", async (req, res) => {
     "NOV",
     "DEC",
   ];
-
-  const fileBuffer = await htmlToPdfBuffer("template.ejs", {
-    products: [{ quantity: 2, unitPrice: 10, totalPrice: 20 }],
-  });
 
   users.map(async (e) => {
     const result = await mail.sendMail({
