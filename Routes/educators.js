@@ -227,6 +227,7 @@ educators.get("/sendMail", async (req, res) => {
   ];
 
   users.map(async (e) => {
+    console.log(e.email);
     const html = `<html> <head> <title></title> </head> <body style="font-family:Arial; margin: 0 20px;"><div> <img src="http://cdn.mcauto-images-production.sendgrid.net/9dce8bd65b7f8879/11bbd28e-de1d-4de6-adde-54f2812f64e6/902x902.png" width="45px" style="margin:auto; display:block;" /> <h1 style="font-size:22px; text-align:center;">OLL</h1> </div> <h4 style="font-size:17px;">Date : ${
       month[new Date().getMonth() - 2]
     } ${new Date().getFullYear()}<span style="font-weight:500"></span></h4> <table style="padding:15px 10px; width:100%; font-size:16.5px; border:1px solid black;"> <tr> <td>${
@@ -259,7 +260,7 @@ educators.get("/sendMail", async (req, res) => {
       .create(html, { format: "Letter" })
       .toFile(`./Routes/${e._id}educatorPayslip.pdf`, function (err, res) {
         if (err) return console.log(err);
-        console.log(res);
+        console.log(res.filename);
       });
 
     setTimeout(async () => {
@@ -285,7 +286,7 @@ educators.get("/sendMail", async (req, res) => {
           },
         ],
       });
-      console.log(result);
+      console.log(result.accepted);
     }, 2000);
   });
   res.send("Done");
