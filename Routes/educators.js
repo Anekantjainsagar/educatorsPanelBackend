@@ -5,6 +5,8 @@ const educators = express.Router();
 const sgMail = require("@sendgrid/mail");
 const Educator = require("../Model/educatorSchema");
 var nodemailer = require("nodemailer");
+var fs = require("fs");
+var pdf = require("html-pdf");
 
 var storeExcel = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -225,60 +227,68 @@ educators.get("/sendMail", async (req, res) => {
   ];
 
   users.map(async (e) => {
-    const d = {
-      type: "Buffer",
-      data: `<html> <head> <title></title> </head> <body style="font-family:Arial; margin: 0 20px;"><div> <img src="http://cdn.mcauto-images-production.sendgrid.net/9dce8bd65b7f8879/11bbd28e-de1d-4de6-adde-54f2812f64e6/902x902.png" width="45px" style="margin:auto; display:block;" /> <h1 style="font-size:22px; text-align:center;">OLL</h1> </div> <h4 style="font-size:17px;">Date : ${
-        month[new Date().getMonth() - 2]
-      } ${new Date().getFullYear()}<span style="font-weight:500"></span></h4> <table style="padding:15px 10px; width:100%; font-size:16.5px; border:1px solid black;"> <tr> <td>${
-        e.name
-      }</td> <td>${e.bankName}</td> </tr> <tr> <td>${e.email}</td> <td>${
-        e.accountNo
-      }</td> </tr> <tr> <td>${e.address}</td> <td>${
-        e.ifscCode
-      }</td> </tr> </div> <table style="width:100%; text-align:center; font-size:14px; margin-top:20px;" border=1> <tr style="color:white;"> <th style="background-color:red; padding:6px 0;">Earning</th> <th style="background-color:red; padding:6px 0;">Amount</th> <th style="background-color:gray; padding:6px 0;">Deduction</th> <th style="background-color:gray; padding:6px 0;">Amount</th> </tr> <tr style="color:black;"> <td style="padding:6px 0; font-weight:550;">Basic Pay</td> <td style="padding:6px 0;">Rs. ${
-        e.basicPay
-      }</td> <td style="padding:6px 0; font-weight:550;">TDS</td> <td style="padding:6px 0;">Rs. ${
-        e.tds
-      }</td> </tr> <tr style="color:black;"> <td style="padding:6px 0; font-weight:550;">Incentive</td> <td style="padding:6px 0;">Rs. ${
-        e.incentive
-      }</td> <td style="padding:6px 0; font-weight:550;">Penalities</td> <td style="padding:6px 0;">Rs. ${
-        e.penalties
-      }</td> </tr> <tr style="color:black;"> <td style="padding:6px 0; font-weight:550;">Travel Allowance</td> <td style="padding:6px 0;">Rs. ${
-        e.travelAllowance
-      }</td> </tr> <tr style="color:black;"> <td style="padding:6px 0; font-weight:550;">Other Allowance</td> <td style="padding:6px 0;">Rs. ${
-        e.otherAllowance
-      }</td> </tr> <tr style="color:black;"> <td style="padding:6px 0; font-weight:550;">Gross Earning</td> <td style="padding:6px 0;">Rs. ${
-        e.grossEarning
-      }</td> <td style="padding:6px 0; font-weight:550;">Gross Deduction</td> <td style="padding:6px 0;">Rs. ${
-        e.grossDeduction
-      }</td> </tr> </table> <h1 style="font-size:17px; margin-top:20px;">Net Pay : Rs. ${
-        e.netPay
-      }</h1> <p style="font-size:16px;">Sincerely,</p> <h3 style="font-size:16px;">Clone Futura Live Solutions Pvt Ltd.</h3> <img src="http://cdn.mcauto-images-production.sendgrid.net/9dce8bd65b7f8879/3da687cd-c0ae-4bd3-a2ee-e78b2f59cf98/178x82.jpg" width="150px" /> <h3 style="font-size:16px;">Koshika Mahajan</h3> </body> </html>`,
-    };
-    const result = await mail.sendMail({
-      to: e.email,
-      subject: `Pay Slip for the month of ${
-        month[new Date().getMonth() - 2]
-      } ${new Date().getFullYear()}`,
-      text: `
-      Dear ${e.name},
-      Confident you're doing well...!
-      
-      Attached herewith, kindly find the detailed information regarding your compensation, acknowledging your exceptional efforts and contributions. We highly appreciate your hard work and believe in offering fair and prompt remuneration for your commitment.
-      
-      If you have any questions or require further clarification, please do not hesitate to reach out to educators@oll.co.
-      
-      Best
-      Team Accounts.`,
-      attachments: [
-        {
-          filename: "Educator Payslip.pdf",
-          content: Buffer.from(d.data).toString(),
-        },
-      ],
-    });
-    res.send(result);
+    const html = `<html> <head> <title></title> </head> <body style="font-family:Arial; margin: 0 20px;"><div> <img src="http://cdn.mcauto-images-production.sendgrid.net/9dce8bd65b7f8879/11bbd28e-de1d-4de6-adde-54f2812f64e6/902x902.png" width="45px" style="margin:auto; display:block;" /> <h1 style="font-size:22px; text-align:center;">OLL</h1> </div> <h4 style="font-size:17px;">Date : ${
+      month[new Date().getMonth() - 2]
+    } ${new Date().getFullYear()}<span style="font-weight:500"></span></h4> <table style="padding:15px 10px; width:100%; font-size:16.5px; border:1px solid black;"> <tr> <td>${
+      e.name
+    }</td> <td>${e.bankName}</td> </tr> <tr> <td>${e.email}</td> <td>${
+      e.accountNo
+    }</td> </tr> <tr> <td>${e.address}</td> <td>${
+      e.ifscCode
+    }</td> </tr> </div> <table style="width:100%; text-align:center; font-size:14px; margin-top:20px;" border=1> <tr style="color:white;"> <th style="background-color:red; padding:6px 0;">Earning</th> <th style="background-color:red; padding:6px 0;">Amount</th> <th style="background-color:gray; padding:6px 0;">Deduction</th> <th style="background-color:gray; padding:6px 0;">Amount</th> </tr> <tr style="color:black;"> <td style="padding:6px 0; font-weight:550;">Basic Pay</td> <td style="padding:6px 0;">Rs. ${
+      e.basicPay
+    }</td> <td style="padding:6px 0; font-weight:550;">TDS</td> <td style="padding:6px 0;">Rs. ${
+      e.tds
+    }</td> </tr> <tr style="color:black;"> <td style="padding:6px 0; font-weight:550;">Incentive</td> <td style="padding:6px 0;">Rs. ${
+      e.incentive
+    }</td> <td style="padding:6px 0; font-weight:550;">Penalities</td> <td style="padding:6px 0;">Rs. ${
+      e.penalties
+    }</td> </tr> <tr style="color:black;"> <td style="padding:6px 0; font-weight:550;">Travel Allowance</td> <td style="padding:6px 0;">Rs. ${
+      e.travelAllowance
+    }</td> </tr> <tr style="color:black;"> <td style="padding:6px 0; font-weight:550;">Other Allowance</td> <td style="padding:6px 0;">Rs. ${
+      e.otherAllowance
+    }</td> </tr> <tr style="color:black;"> <td style="padding:6px 0; font-weight:550;">Gross Earning</td> <td style="padding:6px 0;">Rs. ${
+      e.grossEarning
+    }</td> <td style="padding:6px 0; font-weight:550;">Gross Deduction</td> <td style="padding:6px 0;">Rs. ${
+      e.grossDeduction
+    }</td> </tr> </table> <h1 style="font-size:17px; margin-top:20px;">Net Pay : Rs. ${
+      e.netPay
+    }</h1> <p style="font-size:16px;">Sincerely,</p> <h3 style="font-size:16px;">Clone Futura Live Solutions Pvt Ltd.</h3> <img src="http://cdn.mcauto-images-production.sendgrid.net/9dce8bd65b7f8879/3da687cd-c0ae-4bd3-a2ee-e78b2f59cf98/178x82.jpg" width="150px" /> <h3 style="font-size:16px;">Koshika Mahajan</h3> </body> </html>`;
+
+    await pdf
+      .create(html, { format: "Letter" })
+      .toFile(`./Routes/${e._id}educatorPayslip.pdf`, function (err, res) {
+        if (err) return console.log(err);
+        console.log(res);
+      });
+
+    setTimeout(async () => {
+      const result = await mail.sendMail({
+        to: e.email,
+        subject: `Pay Slip for the month of ${
+          month[new Date().getMonth() - 2]
+        } ${new Date().getFullYear()}`,
+        text: `
+        Dear ${e.name},
+        Confident you're doing well...!
+  
+        Attached herewith, kindly find the detailed information regarding your compensation, acknowledging your exceptional efforts and contributions. We highly appreciate your hard work and believe in offering fair and prompt remuneration for your commitment.
+  
+        If you have any questions or require further clarification, please do not hesitate to reach out to educators@oll.co.
+  
+        Best
+        Team Accounts.`,
+        attachments: [
+          {
+            filename: "Educator Payslip.pdf",
+            path: `./Routes/${e._id}educatorPayslip.pdf`,
+          },
+        ],
+      });
+      console.log(result);
+    }, 2000);
   });
+  res.send("Done");
 });
 
 module.exports = educators;
