@@ -123,12 +123,17 @@ educators.put("/updateEducator", async (req, res) => {
     incentive,
     travelAllowance,
     otherAllowance,
-    grossEarning,
     tds,
     penalties,
-    grossDeduction,
-    netPay,
   } = req.body;
+
+  let grossDeduction = parseInt(tds) + parseInt(penalties);
+  let grossEarning =
+    parseInt(basicPay) +
+    parseInt(incentive) +
+    parseInt(travelAllowance) +
+    parseInt(otherAllowance);
+  let netPay = parseInt(grossEarning) - parseInt(grossDeduction);
 
   Educator.updateOne(
     { _id: id },
