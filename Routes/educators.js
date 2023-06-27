@@ -270,7 +270,6 @@ educators.get("/sendMail", async (req, res) => {
             },
           },
         },
-        { format: "Letter" }
       )
       .toFile(`./Routes/${e._id}educatorPayslip.pdf`, function (err, res) {
         console.log(err);
