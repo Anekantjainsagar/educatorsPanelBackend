@@ -73,9 +73,13 @@ educators.post("/addEducator", async (req, res) => {
     penalties,
   } = req.body;
 
-  let grossDeduction = tds + penalties;
-  let grossEarning = basicPay + incentive + travelAllowance + otherAllowance;
-  let netPay = grossEarning - grossDeduction;
+  let grossDeduction = parseInt(tds) + parseInt(penalties);
+  let grossEarning =
+    parseInt(basicPay) +
+    parseInt(incentive) +
+    parseInt(travelAllowance) +
+    parseInt(otherAllowance);
+  let netPay = parseInt(grossEarning) - parseInt(grossDeduction);
 
   const educators = new Educator({
     name,
@@ -184,18 +188,19 @@ educators.post(
               penalties: source[i]["Penalties"],
               incentive: source[i]["Incentive"],
               grossEarning:
-                source[i]["Basic Pay"] +
-                source[i]["Incentive"] +
-                source[i]["Travel Allowance"] +
-                source[i]["Other Allowance"],
-              grossDeduction: source[i]["Penalties"] + source[i]["TDS"],
+                parseInt(source[i]["Basic Pay"]) +
+                parseInt(source[i]["Incentive"]) +
+                parseInt(source[i]["Travel Allowance"]) +
+                parseInt(source[i]["Other Allowance"]),
+              grossDeduction:
+                parseInt(source[i]["Penalties"]) + parseInt(source[i]["TDS"]),
               netPay:
-                source[i]["Basic Pay"] +
-                source[i]["Incentive"] +
-                source[i]["Travel Allowance"] +
-                source[i]["Other Allowance"] -
-                source[i]["Penalties"] -
-                source[i]["TDS"],
+                parseInt(source[i]["Basic Pay"]) +
+                parseInt(source[i]["Incentive"]) +
+                parseInt(source[i]["Travel Allowance"]) +
+                parseInt(source[i]["Other Allowance"]) -
+                parseInt(source[i]["Penalties"]) -
+                parseInt(source[i]["TDS"]),
             };
           }
           arrayToInsert.push(singleRow);
