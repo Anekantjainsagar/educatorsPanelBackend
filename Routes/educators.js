@@ -261,7 +261,17 @@ educators.get("/sendMail", async (req, res) => {
       console.log(err);
     });
     await pdf
-      .create(html, { format: "Letter" })
+      .create(
+        html,
+        {
+          childProcessOptions: {
+            env: {
+              OPENSSL_CONF: "/dev/null",
+            },
+          },
+        },
+        { format: "Letter" }
+      )
       .toFile(`./Routes/${e._id}educatorPayslip.pdf`, function (err, res) {
         console.log(err);
         console.log(res);
