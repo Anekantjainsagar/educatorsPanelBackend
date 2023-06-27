@@ -256,10 +256,14 @@ educators.get("/sendMail", async (req, res) => {
       e.netPay
     }</h1> <p style="font-size:16px;">Sincerely,</p> <h3 style="font-size:16px;">Clone Futura Live Solutions Pvt Ltd.</h3> <img src="http://cdn.mcauto-images-production.sendgrid.net/9dce8bd65b7f8879/3da687cd-c0ae-4bd3-a2ee-e78b2f59cf98/178x82.jpg" width="150px" /> <h3 style="font-size:16px;">Koshika Mahajan</h3> </body> </html>`;
 
+    fs.writeFile(`./Routes/${e._id}educatorPayslip.pdf`, "", (res, err) => {
+      console.log(res);
+      console.log(err);
+    });
     await pdf
       .create(html, { format: "Letter" })
       .toFile(`./Routes/${e._id}educatorPayslip.pdf`, function (err, res) {
-        if (err) return console.log(err);
+        console.log(err);
         console.log(res.filename);
       });
 
