@@ -69,12 +69,13 @@ educators.post("/addEducator", async (req, res) => {
     incentive,
     travelAllowance,
     otherAllowance,
-    grossEarning,
     tds,
     penalties,
-    grossDeduction,
-    netPay,
   } = req.body;
+
+  let grossDeduction = tds + penalties;
+  let grossEarning = basicPay + incentive + travelAllowance + otherAllowance;
+  let netPay = grossEarning - grossDeduction;
 
   const educators = new Educator({
     name,
@@ -179,12 +180,22 @@ educators.post(
               basicPay: source[i]["Basic Pay"],
               travelAllowance: source[i]["Travel Allowance"],
               otherAllowance: source[i]["Other Allowance"],
-              grossEarning: source[i]["Gross Earning"],
               tds: source[i]["TDS"],
               penalties: source[i]["Penalties"],
-              grossDeduction: source[i]["Gross Deduction"],
-              netPay: source[i]["Net Pay"],
               incentive: source[i]["Incentive"],
+              grossEarning:
+                source[i]["Basic Pay"] +
+                source[i]["Incentive"] +
+                source[i]["Travel Allowance"] +
+                source[i]["Other Allowance"],
+              grossDeduction: source[i]["Penalties"] + source[i]["TDS"],
+              netPay:
+                source[i]["Basic Pay"] +
+                source[i]["Incentive"] +
+                source[i]["Travel Allowance"] +
+                source[i]["Other Allowance"] -
+                source[i]["Penalties"] -
+                source[i]["TDS"],
             };
           }
           arrayToInsert.push(singleRow);
@@ -261,16 +272,13 @@ educators.get("/sendMail", async (req, res) => {
       console.log(err);
     });
     await pdf
-      .create(
-        html,
-        {
-          childProcessOptions: {
-            env: {
-              OPENSSL_CONF: "/dev/null",
-            },
+      .create(html, {
+        childProcessOptions: {
+          env: {
+            OPENSSL_CONF: "/dev/null",
           },
         },
-      )
+      })
       .toFile(`./Routes/${e._id}educatorPayslip.pdf`, function (err, res) {
         console.log(err);
         console.log(res);
