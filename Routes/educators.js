@@ -222,8 +222,9 @@ educators.get("/downloadFormat", (req, res) => {
   res.download("./Routes/uploads/EducatorPanel.csv");
 });
 
-educators.get("/sendMail", async (req, res) => {
-  const users = await Educator.find();
+educators.post("/sendMail", async (req, res) => {
+  let { emailUser } = req.body;
+  emailUser = JSON.parse(emailUser);
 
   var mail = nodemailer.createTransport({
     service: "gmail",
@@ -247,8 +248,10 @@ educators.get("/sendMail", async (req, res) => {
     "DEC",
   ];
 
-  users.map(async (e) => {
+  emailUser.map(async (id) => {
+    const e = await Educator.findById(id);
     console.log(e.email);
+
     const html = `<html> <head> <title></title> </head> <body style="font-family:Arial; margin: 0 20px;"><div> <img src="http://cdn.mcauto-images-production.sendgrid.net/9dce8bd65b7f8879/11bbd28e-de1d-4de6-adde-54f2812f64e6/902x902.png" width="45px" style="margin:auto; display:block;" /> <h1 style="font-size:22px; text-align:center;">OLL</h1> </div> <h4 style="font-size:17px;">Date : ${
       month[new Date().getMonth() - 2]
     } ${new Date().getFullYear()}<span style="font-weight:500"></span></h4> <table style="padding:15px 10px; width:100%; font-size:16.5px; border:1px solid black;"> <tr> <td>${
@@ -277,10 +280,10 @@ educators.get("/sendMail", async (req, res) => {
       e.netPay
     }</h1> <p style="font-size:16px;">Sincerely,</p> <h3 style="font-size:16px;">Clone Futura Live Solutions Pvt Ltd.</h3> <img src="http://cdn.mcauto-images-production.sendgrid.net/9dce8bd65b7f8879/3da687cd-c0ae-4bd3-a2ee-e78b2f59cf98/178x82.jpg" width="150px" /> <h3 style="font-size:16px;">Koshika Mahajan</h3> </body> </html>`;
 
-    fs.writeFile(`./Routes/${e._id}educatorPayslip.pdf`, "", (res, err) => {
-      console.log(res);
-      console.log(err);
-    });
+    // fs.writeFile(`./Routes/${id}educatorPayslip.pdf`, "", (res, err) => {
+    //   console.log(res);
+    //   console.log(err);
+    // });
     await pdf
       .create(html, {
         childProcessOptions: {
@@ -289,7 +292,7 @@ educators.get("/sendMail", async (req, res) => {
           },
         },
       })
-      .toFile(`./Routes/${e._id}educatorPayslip.pdf`, function (err, res) {
+      .toFile(`./Routes/${id}educatorPayslip.pdf`, function (err, res) {
         console.log(err);
         console.log(res);
       });
@@ -313,7 +316,7 @@ educators.get("/sendMail", async (req, res) => {
         attachments: [
           {
             filename: "Educator Payslip.pdf",
-            path: `./Routes/${e._id}educatorPayslip.pdf`,
+            path: `./Routes/${id}educatorPayslip.pdf`,
           },
         ],
       });
