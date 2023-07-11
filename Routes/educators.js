@@ -229,8 +229,8 @@ educators.post("/sendMail", async (req, res) => {
   var mail = nodemailer.createTransport({
     service: "gmail",
     auth: {
-      user: "anekantjainsagar@gmail.com",
-      pass: "wxnebcghxlgplaiu",
+      user: "onlinelivelearning@gmail.com",
+      pass: "xsytviyupvqllfqg",
     },
   });
 
