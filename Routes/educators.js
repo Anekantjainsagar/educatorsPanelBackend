@@ -254,11 +254,13 @@ educators.post("/sendMail", async (req, res) => {
 
     const html = `<html> <head> <title></title> </head> <body style="font-family:Arial; margin: 10px 15px;"><div> <img src="http://cdn.mcauto-images-production.sendgrid.net/9dce8bd65b7f8879/11bbd28e-de1d-4de6-adde-54f2812f64e6/902x902.png" width="40px" style="margin:auto; display:block; margin-top:5px;" /> <h1 style="font-size:18px; text-align:center;">OLL</h1> </div> <h6 style="font-size:14px; text-align:center;">Payslip for the month of ${
       month[new Date().getMonth() - 2]
-    } ${new Date().getFullYear()}<span style="font-weight:500"></span></h6> <table style="padding: 6px 10px; width:100%; font-size:13px; border:1px solid black;"> <tr> <td>${
+    } ${new Date().getFullYear()}<span style="font-weight:500"></span></h6> <table style="padding: 6px 10px; width:100%; font-size:13px; border:1px solid black;"> <tr> <td>Name : ${
       e.name
-    }</td> <td>${e.bankName}</td> </tr> <tr> <td>${e.email}</td> <td>${
-      e.accountNo
-    }</td> </tr> <tr> <td>${e.address}</td> <td>${
+    }</td> <td>Bank : ${e.bankName}</td> </tr> <tr> <td>Email : ${
+      e.email
+    }</td> <td>Acc. no. : ${e.accountNo}</td> </tr> <tr> <td>Address : ${
+      e.address
+    }</td> <td> IFSC Code : ${
       e.ifscCode
     }</td> </tr> </div> <table style="width:100%; text-align:center; font-size:12px; margin-top:15px;" border=1> <tr style="color:white;"> <th style="background-color:"#e0001d"; padding:6px 0;">Earning</th> <th style="background-color:"#e0001d"; padding:6px 0;">Amount</th> <th style="background-color:gray; padding:6px 0;">Deduction</th> <th style="background-color:gray; padding:6px 0;">Amount</th> </tr> <tr style="color:black;"> <td style="padding:6px 0; font-weight:550;">Basic Pay</td> <td style="padding:6px 0;">Rs. ${
       e.basicPay
