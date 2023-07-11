@@ -252,7 +252,7 @@ educators.post("/sendMail", async (req, res) => {
     const e = await Educator.findById(id);
     console.log(e.email);
 
-    const html = `<html> <head> <title></title> </head> <body style="font-family:Arial; margin: 10px 15px;"><div> <img src="http://cdn.mcauto-images-production.sendgrid.net/9dce8bd65b7f8879/11bbd28e-de1d-4de6-adde-54f2812f64e6/902x902.png" width="40px" style="margin:auto; display:block; margin-top:5px;" /> <h1 style="font-size:18px; text-align:center;">OLL</h1> </div> <h6 style="font-size:15px; text-align:center;">Payslip for the month of ${
+    const html = `<html> <head> <title></title> </head> <body style="font-family:Arial; margin: 10px 15px;"><div> <img src="http://cdn.mcauto-images-production.sendgrid.net/9dce8bd65b7f8879/11bbd28e-de1d-4de6-adde-54f2812f64e6/902x902.png" width="40px" style="margin:auto; display:block; margin-top:5px;" /> <h1 style="font-size:18px; text-align:center;">OLL</h1> </div> <h6 style="font-size:14px; text-align:center;">Payslip for the month of ${
       month[new Date().getMonth() - 2]
     } ${new Date().getFullYear()}<span style="font-weight:500"></span></h6> <table style="padding: 6px 10px; width:100%; font-size:13px; border:1px solid black;"> <tr> <td>${
       e.name
@@ -276,9 +276,9 @@ educators.post("/sendMail", async (req, res) => {
       e.grossEarning
     }</td> <td style="padding:6px 0; font-weight:550;">Gross Deduction</td> <td style="padding:6px 0;">Rs. ${
       e.grossDeduction
-    }</td> </tr> </table> <h1 style="font-size:14px; margin-top:5px;">Net Pay : Rs. ${
+    }</td> </tr> </table> <h1 style="font-size:13px; margin-top:5px;">Net Pay : Rs. ${
       e.netPay
-    }</h1> <p style="font-size:12px;">Sincerely,</p> <h3 style="font-size:13px;">Clone Futura Live Solutions Pvt Ltd.</h3> <img src="http://cdn.mcauto-images-production.sendgrid.net/9dce8bd65b7f8879/3da687cd-c0ae-4bd3-a2ee-e78b2f59cf98/178x82.jpg" width="100px" /> <h3 style="font-size:13px;">Koshika Mahajan</h3><img src="http://res.cloudinary.com/dpbsogbtr/image/upload/v1689059968/agodpprxkbjoff1h3w2g.png" style="width:100%; margin-top:5px" /> </body> </html>`;
+    }</h1> <p style="font-size:12px;">Sincerely,</p> <h3 style="font-size:12px;">Clone Futura Live Solutions Pvt Ltd.</h3> <img src="http://cdn.mcauto-images-production.sendgrid.net/9dce8bd65b7f8879/3da687cd-c0ae-4bd3-a2ee-e78b2f59cf98/178x82.jpg" width="100px" /> <h3 style="font-size:12px;">Koshika Mahajan</h3><img src="http://res.cloudinary.com/dpbsogbtr/image/upload/v1689059968/agodpprxkbjoff1h3w2g.png" style="width:100%; margin-top:25px; position:absolute; bottom:0; left:0; width:100%;" /> </body> </html>`;
 
     await pdf
       .create(html, {
