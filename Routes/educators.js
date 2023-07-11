@@ -260,7 +260,7 @@ educators.post("/sendMail", async (req, res) => {
       e.accountNo
     }</td> </tr> <tr> <td>${e.address}</td> <td>${
       e.ifscCode
-    }</td> </tr> </div> <table style="width:100%; text-align:center; font-size:12px; margin-top:15px;" border=1> <tr style="color:white;"> <th style="background-color:red; padding:6px 0;">Earning</th> <th style="background-color:red; padding:6px 0;">Amount</th> <th style="background-color:gray; padding:6px 0;">Deduction</th> <th style="background-color:gray; padding:6px 0;">Amount</th> </tr> <tr style="color:black;"> <td style="padding:6px 0; font-weight:550;">Basic Pay</td> <td style="padding:6px 0;">Rs. ${
+    }</td> </tr> </div> <table style="width:100%; text-align:center; font-size:12px; margin-top:15px;" border=1> <tr style="color:white;"> <th style="background-color:"#e0001d"; padding:6px 0;">Earning</th> <th style="background-color:"#e0001d"; padding:6px 0;">Amount</th> <th style="background-color:gray; padding:6px 0;">Deduction</th> <th style="background-color:gray; padding:6px 0;">Amount</th> </tr> <tr style="color:black;"> <td style="padding:6px 0; font-weight:550;">Basic Pay</td> <td style="padding:6px 0;">Rs. ${
       e.basicPay
     }</td> <td style="padding:6px 0; font-weight:550;">TDS</td> <td style="padding:6px 0;">Rs. ${
       e.tds
