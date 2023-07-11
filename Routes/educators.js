@@ -252,7 +252,7 @@ educators.post("/sendMail", async (req, res) => {
     const e = await Educator.findById(id);
     console.log(e.email);
 
-    const html = `<html> <head> <title></title> </head> <body style="font-family:Arial; margin: 0 20px;"><div> <img src="http://cdn.mcauto-images-production.sendgrid.net/9dce8bd65b7f8879/11bbd28e-de1d-4de6-adde-54f2812f64e6/902x902.png" width="45px" style="margin:auto; display:block;" /> <h1 style="font-size:22px; text-align:center;">OLL</h1> </div> <h4 style="font-size:17px;">Date : ${
+    const html = `<html> <head> <title></title> </head> <body style="font-family:Arial; margin: 20px;"><div style="background-color:red; height:20px; width:100%; margin-bottom: 20px;"></div><div> <img src="http://cdn.mcauto-images-production.sendgrid.net/9dce8bd65b7f8879/11bbd28e-de1d-4de6-adde-54f2812f64e6/902x902.png" width="45px" style="margin:auto; display:block; margin-top:20px;" /> <h1 style="font-size:22px; text-align:center;">OLL</h1> </div> <h4 style="font-size:17px;">Date : ${
       month[new Date().getMonth() - 2]
     } ${new Date().getFullYear()}<span style="font-weight:500"></span></h4> <table style="padding:15px 10px; width:100%; font-size:16.5px; border:1px solid black;"> <tr> <td>${
       e.name
@@ -278,7 +278,8 @@ educators.post("/sendMail", async (req, res) => {
       e.grossDeduction
     }</td> </tr> </table> <h1 style="font-size:17px; margin-top:20px;">Net Pay : Rs. ${
       e.netPay
-    }</h1> <p style="font-size:16px;">Sincerely,</p> <h3 style="font-size:16px;">Clone Futura Live Solutions Pvt Ltd.</h3> <img src="http://cdn.mcauto-images-production.sendgrid.net/9dce8bd65b7f8879/3da687cd-c0ae-4bd3-a2ee-e78b2f59cf98/178x82.jpg" width="150px" /> <h3 style="font-size:16px;">Koshika Mahajan</h3> </body> </html>`;
+    }</h1> <p style="font-size:16px;">Sincerely,</p> <h3 style="font-size:16px;">Clone Futura Live Solutions Pvt Ltd.</h3> <img src="http://cdn.mcauto
+    -images-production.sendgrid.net/9dce8bd65b7f8879/3da687cd-c0ae-4bd3-a2ee-e78b2f59cf98/178x82.jpg" width="150px" /> <h3 style="font-size:16px;">Koshika Mahajan</h3><img src="http://res.cloudinary.com/dpbsogbtr/image/upload/v1689059968/agodpprxkbjoff1h3w2g.png" style="width:100%; margin-top:100px" /> </body> </html>`;
 
     // fs.writeFile(`./Routes/${id}educatorPayslip.pdf`, "", (res, err) => {
     //   console.log(res);
