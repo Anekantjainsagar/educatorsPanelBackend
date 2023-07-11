@@ -252,15 +252,15 @@ educators.post("/sendMail", async (req, res) => {
     const e = await Educator.findById(id);
     console.log(e.email);
 
-    const html = `<html> <head> <title></title> </head> <body style="font-family:Arial; margin: 20px;"><div> <img src="http://cdn.mcauto-images-production.sendgrid.net/9dce8bd65b7f8879/11bbd28e-de1d-4de6-adde-54f2812f64e6/902x902.png" width="45px" style="margin:auto; display:block; margin-top:20px;" /> <h1 style="font-size:22px; text-align:center;">OLL</h1> </div> <h4 style="font-size:17px; text-align:center;">Payslip for the month of ${
+    const html = `<html> <head> <title></title> </head> <body style="font-family:Arial; margin: 20px;"><div> <img src="http://cdn.mcauto-images-production.sendgrid.net/9dce8bd65b7f8879/11bbd28e-de1d-4de6-adde-54f2812f64e6/902x902.png" width="45px" style="margin:auto; display:block; margin-top:20px;" /> <h1 style="font-size:22px; text-align:center;">OLL</h1> </div> <h6 style="font-size:16px; text-align:center;">Payslip for the month of ${
       month[new Date().getMonth() - 2]
-    } ${new Date().getFullYear()}<span style="font-weight:500"></span></h4> <table style="padding:15px 10px; width:100%; font-size:16.5px; border:1px solid black;"> <tr> <td>${
+    } ${new Date().getFullYear()}<span style="font-weight:500"></span></h6> <table style="padding:15px 10px; width:100%; font-size:16px; border:1px solid black;"> <tr> <td>${
       e.name
     }</td> <td>${e.bankName}</td> </tr> <tr> <td>${e.email}</td> <td>${
       e.accountNo
     }</td> </tr> <tr> <td>${e.address}</td> <td>${
       e.ifscCode
-    }</td> </tr> </div> <table style="width:100%; text-align:center; font-size:14px; margin-top:20px;" border=1> <tr style="color:white;"> <th style="background-color:red; padding:6px 0;">Earning</th> <th style="background-color:red; padding:6px 0;">Amount</th> <th style="background-color:gray; padding:6px 0;">Deduction</th> <th style="background-color:gray; padding:6px 0;">Amount</th> </tr> <tr style="color:black;"> <td style="padding:6px 0; font-weight:550;">Basic Pay</td> <td style="padding:6px 0;">Rs. ${
+    }</td> </tr> </div> <table style="width:100%; text-align:center; font-size:13px; margin-top:20px;" border=1> <tr style="color:white;"> <th style="background-color:red; padding:6px 0;">Earning</th> <th style="background-color:red; padding:6px 0;">Amount</th> <th style="background-color:gray; padding:6px 0;">Deduction</th> <th style="background-color:gray; padding:6px 0;">Amount</th> </tr> <tr style="color:black;"> <td style="padding:6px 0; font-weight:550;">Basic Pay</td> <td style="padding:6px 0;">Rs. ${
       e.basicPay
     }</td> <td style="padding:6px 0; font-weight:550;">TDS</td> <td style="padding:6px 0;">Rs. ${
       e.tds
@@ -276,15 +276,10 @@ educators.post("/sendMail", async (req, res) => {
       e.grossEarning
     }</td> <td style="padding:6px 0; font-weight:550;">Gross Deduction</td> <td style="padding:6px 0;">Rs. ${
       e.grossDeduction
-    }</td> </tr> </table> <h1 style="font-size:17px; margin-top:20px;">Net Pay : Rs. ${
+    }</td> </tr> </table> <h1 style="font-size:16px; margin-top:20px;">Net Pay : Rs. ${
       e.netPay
-    }</h1> <p style="font-size:16px;">Sincerely,</p> <h3 style="font-size:16px;">Clone Futura Live Solutions Pvt Ltd.</h3> <img src="http://cdn.mcauto
-    -images-production.sendgrid.net/9dce8bd65b7f8879/3da687cd-c0ae-4bd3-a2ee-e78b2f59cf98/178x82.jpg" width="150px" /> <h3 style="font-size:16px;">Koshika Mahajan</h3><img src="http://res.cloudinary.com/dpbsogbtr/image/upload/v1689059968/agodpprxkbjoff1h3w2g.png" style="width:100%; margin-top:100px" /> </body> </html>`;
+    }</h1> <p style="font-size:14px;">Sincerely,</p> <h3 style="font-size:15px;">Clone Futura Live Solutions Pvt Ltd.</h3> <img src="http://cdn.mcauto-images-production.sendgrid.net/9dce8bd65b7f8879/3da687cd-c0ae-4bd3-a2ee-e78b2f59cf98/178x82.jpg" width="150px" /> <h3 style="font-size:15px;">Koshika Mahajan</h3><img src="http://res.cloudinary.com/dpbsogbtr/image/upload/v1689059968/agodpprxkbjoff1h3w2g.png" style="width:100%; margin-top:100px" /> </body> </html>`;
 
-    // fs.writeFile(`./Routes/${id}educatorPayslip.pdf`, "", (res, err) => {
-    //   console.log(res);
-    //   console.log(err);
-    // });
     await pdf
       .create(html, {
         childProcessOptions: {
