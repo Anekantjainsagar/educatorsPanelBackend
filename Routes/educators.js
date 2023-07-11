@@ -252,7 +252,7 @@ educators.post("/sendMail", async (req, res) => {
     const e = await Educator.findById(id);
     console.log(e.email);
 
-    const html = `<html> <head> <title></title> </head> <body style="font-family:Arial; margin: 20px;"><div style="background-color:red; height:20px; width:100%; margin-bottom: 20px;"></div><div> <img src="http://cdn.mcauto-images-production.sendgrid.net/9dce8bd65b7f8879/11bbd28e-de1d-4de6-adde-54f2812f64e6/902x902.png" width="45px" style="margin:auto; display:block; margin-top:20px;" /> <h1 style="font-size:22px; text-align:center;">OLL</h1> </div> <h4 style="font-size:17px;">Date : ${
+    const html = `<html> <head> <title></title> </head> <body style="font-family:Arial; margin: 20px;"><div> <img src="http://cdn.mcauto-images-production.sendgrid.net/9dce8bd65b7f8879/11bbd28e-de1d-4de6-adde-54f2812f64e6/902x902.png" width="45px" style="margin:auto; display:block; margin-top:20px;" /> <h1 style="font-size:22px; text-align:center;">OLL</h1> </div> <h4 style="font-size:17px; text-align:center;">Payslip for the month of ${
       month[new Date().getMonth() - 2]
     } ${new Date().getFullYear()}<span style="font-weight:500"></span></h4> <table style="padding:15px 10px; width:100%; font-size:16.5px; border:1px solid black;"> <tr> <td>${
       e.name
