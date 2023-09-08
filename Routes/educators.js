@@ -160,6 +160,22 @@ educators.put("/updateEducator", async (req, res) => {
   });
 });
 
+educators.put("/deleteEducator", async (req, res) => {
+  let { emailUser } = req.body;
+  emailUser = JSON.parse(emailUser);
+
+  emailUser.map(async (id) => {
+    Educator.deleteOne({ _id: id })
+      .then((response) => {
+        console.log("object");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
+  res.send("Done");
+});
+
 educators.delete("/deleteEducator", (req, res) => {
   const { id } = req.body;
   Educator.deleteOne({ _id: id }).then((response) => {
